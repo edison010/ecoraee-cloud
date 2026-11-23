@@ -1,0 +1,35 @@
+{
+  "name": "ecoraee-cloud-local",
+  "version": "1.0.0",
+  "description": "EcoRAEE Cloud: trazabilidad de RAEE en local o en AWS",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "dev:api": "node server/index.js",
+    "build": "vite build",
+    "prestart": "npm run build",
+    "start": "node server/index.js",
+    "start:api": "node server/index.js",
+    "migrate": "node server/migrate.js",
+    "schema": "node server/schema.js"
+  },
+  "engines": {
+    "node": ">=22.13"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.1176.0",
+    "@aws-sdk/client-secrets-manager": "^3.1176.0",
+    "@aws-sdk/client-sns": "^3.1176.0",
+    "@aws-sdk/s3-request-presigner": "^3.1176.0",
+    "express": "^4.21.0",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1"
+  },
+  "optionalDependencies": {
+    "mssql": "^11.0.1"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^6.2.1",
+    "vite": "^8.3.6"
+  }
+}

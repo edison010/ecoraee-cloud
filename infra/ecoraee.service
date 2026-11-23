@@ -1,0 +1,14 @@
+[Unit]
+Description=EcoRAEE Cloud API
+After=network-online.target
+
+[Service]
+User=ecoraee
+WorkingDirectory=/opt/ecoraee/app
+EnvironmentFile=/etc/ecoraee.env
+Environment=NODE_ENV=production NODE_EXTRA_CA_CERTS=/opt/ecoraee/rds-ca.pem
+ExecStart=/usr/bin/node server/index.js
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
