@@ -8,6 +8,20 @@ import ResourceForm from './ResourceForm.jsx';
 import { api } from '../../services/api.js';
 import { formatDate, formatNumber, pretty } from '../../utils/format.js';
 
+const ICONS = {
+  trace: <><path d="M3 12a9 9 0 1 0 3-6.7L3 8" /><path d="M3 3v5h5M12 7v5l3 2" /></>,
+  edit: <><path d="M4 20h4L19 9l-4-4L4 16v4Z" /><path d="m13.5 6.5 4 4" /></>,
+  delete: <><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3" /></>,
+};
+
+function IconAction({ icon, label, className = '', ...props }) {
+  return (
+    <button type="button" className={`icon-btn ${className}`.trim()} aria-label={label} title={label} {...props}>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">{ICONS[icon]}</svg>
+    </button>
+  );
+}
+
 function cellValue(field, row, referenceOptions) {
   const value = row[field.name];
   if (value == null || value === '') return <span className="muted">Sin dato</span>;
@@ -107,8 +121,8 @@ export default function ResourcePage({ name, resource, onTrace }) {
     {notice && <p className={`notice${notice.error ? ' error' : ''}`} role={notice.error ? 'alert' : 'status'}>{notice.message}</p>}
     <div className="resource-toolbar"><label className="search-field"><span className="sr-only">Buscar en {resource.title}</span><input type="search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder={`Buscar en ${resource.title.toLocaleLowerCase('es')}`} /></label></div>
     <div className="table-wrap"><table><thead><tr>{fields.map((field) => <th className={field.type === 'number' ? 'num' : ''} key={field.name}>{field.label}</th>)}<th className="act">Acciones</th></tr></thead>
-      <tbody>{shown.map((row) => <tr key={row[resource.pk]}>{fields.map((field) => <td className={`${field.type === 'number' ? 'num' : ''} ${field.type === 'textarea' || field.type === 'ref' ? 'wrap' : ''} ${['marca', 'modelo'].includes(field.name) ? 'nowrap' : ''}`} key={field.name}>{cellValue(field, row, referenceOptions)}</td>)}
-        <td className="act"><div className="row-actions">{resource.trace && <Button size="small" variant="ghost" onClick={() => onTrace(row[resource.pk])}>Trazabilidad</Button>}{name === 'traslado' && ['PROGRAMADO', 'EN_CURSO'].includes(row.estado) && <Button size="small" variant="primary" disabled={busyId === row[resource.pk]} onClick={() => advanceTransfer(row)}>{busyId === row[resource.pk] ? 'Guardando…' : row.estado === 'PROGRAMADO' ? 'Iniciar traslado' : 'Registrar llegada'}</Button>}<Button size="small" variant="ghost" onClick={() => setEditing(row)}>Editar</Button><Button size="small" variant="ghost" className="danger-text" disabled={busyId === row[resource.pk]} onClick={() => remove(row)}>Eliminar</Button></div></td>
+      <tbody>{shown.map((row) => <tr key={row[resource.pk]}>{fields.map((field) => <td className={`${field.type === 'number' ? 'num' : ''} ${field.type === 'textarea' || field.type === 'ref' ? 'wrap' : ''} ${['marca', 'modelo'].includes(field.name) || field.type === 'select' ? 'nowrap' : ''}`} key={field.name}>{cellValue(field, row, referenceOptions)}</td>)}
+        <td className="act"><div className="row-actions">{resource.trace && <IconAction icon="trace" label="Ver trazabilidad" onClick={() => onTrace(row[resource.pk])} />}{name === 'traslado' && ['PROGRAMADO', 'EN_CURSO'].includes(row.estado) && <Button size="small" variant="primary" disabled={busyId === row[resource.pk]} onClick={() => advanceTransfer(row)}>{busyId === row[resource.pk] ? 'Guardando…' : row.estado === 'PROGRAMADO' ? 'Iniciar traslado' : 'Registrar llegada'}</Button>}<IconAction icon="edit" label="Editar" onClick={() => setEditing(row)} /><IconAction icon="delete" label="Eliminar" className="danger" disabled={busyId === row[resource.pk]} onClick={() => remove(row)} /></div></td>
       </tr>)}{shown.length === 0 && <tr><td colSpan={fields.length + 1}><div className="empty-state"><strong>{rows.length ? 'Sin coincidencias' : `Aún no hay ${resource.title.toLocaleLowerCase('es')}`}</strong><span>{rows.length ? 'Prueba con otra búsqueda.' : `Usa «Crear ${resource.singular}» para empezar.`}</span></div></td></tr>}</tbody>
     </table></div>
     {editing !== undefined && <ResourceForm name={name} resource={resource} row={editing} generatedCode={editing === null ? nextCode(name, rows) : undefined} referenceOptions={referenceOptions} onClose={() => setEditing(undefined)} onSaved={() => { setEditing(undefined); setNotice({ message: editing ? 'Cambios guardados.' : 'Registro guardado.', error: false }); setRetry((value) => value + 1); }} />}

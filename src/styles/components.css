@@ -176,3 +176,15 @@ td .code, td.nowrap { white-space: nowrap; }
 .upload-form .wide { grid-column: 1 / -1; }
 .upload-form button { justify-self: start; }
 @media (max-width: 640px) { .upload-form { grid-template-columns: 1fr; } }
+
+/* Acciones de fila: íconos y columna fija a la derecha */
+.row-actions { gap: 4px; }
+.icon-btn { display: grid; place-items: center; width: 34px; height: 34px; padding: 0; border: 0; border-radius: 10px; background: #f4f3f6; color: #3c3b42; cursor: pointer; transition: background 150ms var(--ease), color 150ms var(--ease); }
+.icon-btn svg { width: 17px; height: 17px; }
+.icon-btn.danger { color: #a42d39; }
+.icon-btn:disabled { opacity: .5; cursor: progress; }
+@media (hover: hover) and (pointer: fine) { .icon-btn:hover { background: var(--brand-tint); color: var(--brand-dark); } .icon-btn.danger:hover { background: #fde9eb; color: #a42d39; } }
+th.act, td.act { position: sticky; right: 0; z-index: 1; background: var(--surface); box-shadow: -1px 0 0 var(--line); }
+th.act { z-index: 2; background: #f7f6f9; }
+td.act .btn.sm { white-space: nowrap; }
+td.wrap { min-width: 110px; }

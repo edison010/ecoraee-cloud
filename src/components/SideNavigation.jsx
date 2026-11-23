@@ -26,14 +26,14 @@ export default function SideNavigation({ resources, route }) {
   }, {});
 
   return (
-    <aside className="side-navigation">
+    <aside className="side-navigation" id="side-navigation">
       <nav aria-label="Principal" className="nav-links">
-        <a className="nav-link nav-mobile-panel" href="#/panel" aria-current={route === 'panel' ? 'page' : undefined}><NavIcon name="panel" /><span>Panel</span></a>
+        <a className="nav-link nav-mobile-panel" href="#/panel" title="Panel" aria-current={route === 'panel' ? 'page' : undefined}><NavIcon name="panel" /><span>Panel</span></a>
         {Object.entries(groups).map(([group, items]) => (
           <div className="nav-group" key={group}>
             <h2>{group}</h2>
             {items.map(([name, resource]) => (
-              <a className="nav-link" href={`#/${name}`} aria-current={route === name ? 'page' : undefined} key={name}>
+              <a className="nav-link" href={`#/${name}`} title={resource.title || pretty(name)} aria-current={route === name ? 'page' : undefined} key={name}>
                 <NavIcon name={name} /><span>{resource.title || pretty(name)}</span>
               </a>
             ))}

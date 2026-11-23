@@ -33,3 +33,18 @@
   .nav-link { white-space: nowrap; }
   .main-content { grid-row: 3; padding: 20px 16px 48px; }
 }
+
+/* Menú lateral contraíble */
+.brand-row { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.menu-toggle { display: grid; place-items: center; width: 36px; height: 36px; flex: 0 0 auto; padding: 0; border: 0; border-radius: 10px; background: transparent; color: #4b4a52; cursor: pointer; }
+.menu-toggle svg { width: 20px; height: 20px; }
+.app-shell { transition: grid-template-columns 200ms var(--ease); }
+.app-shell.nav-collapsed { grid-template-columns: 76px minmax(0, 1fr); }
+.nav-collapsed .side-navigation { padding: 16px 12px; }
+.nav-collapsed .nav-group h2 { height: 1px; margin: 12px 8px; padding: 0; overflow: hidden; background: var(--line); color: transparent; }
+.nav-collapsed .nav-link { justify-content: center; padding: 10px 0; }
+.nav-collapsed .nav-link span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.nav-collapsed .nav-icon { width: 18px; height: 18px; }
+@media (hover: hover) and (pointer: fine) { .menu-toggle:hover { background: #f2f1f4; color: var(--ink); } }
+@media (max-width: 860px) { .menu-toggle { display: none; } .app-shell.nav-collapsed { grid-template-columns: minmax(0, 1fr); } .nav-collapsed .nav-link span { position: static; width: auto; height: auto; clip: auto; } .nav-collapsed .nav-link { padding: 8px 10px; } }
+@media (prefers-reduced-motion: reduce) { .app-shell { transition: none; } }
