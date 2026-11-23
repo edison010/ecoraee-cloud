@@ -62,3 +62,10 @@
 @media (max-width: 860px) { .menu-toggle { display: none; } .app-shell.nav-collapsed { grid-template-columns: minmax(0, 1fr); } .side-navigation, .nav-collapsed .side-navigation { width: auto; box-shadow: none; } .nav-collapsed .side-navigation .nav-link span { opacity: 1; } }
 @media (prefers-reduced-motion: reduce) { .app-shell, .side-navigation, .nav-link span, .nav-group h2, .menu-toggle .bar { transition: none; } }
 @media (max-width: 1180px) { .section-tabs { justify-content: flex-start; overflow-x: auto; scrollbar-width: none; } .section-tab { padding: 7px 11px; } }
+
+/* Menú más compacto: los íconos empiezan arriba y caben todos */
+@media (min-width: 861px) {
+  .side-navigation, .nav-collapsed .side-navigation { padding-top: 8px; padding-bottom: 8px; }
+  .nav-group h2 { padding: 10px 14px 4px; font-size: 12px; line-height: 16px; }
+  .nav-link { min-height: 34px; padding-top: 7px; padding-bottom: 7px; }
+}
