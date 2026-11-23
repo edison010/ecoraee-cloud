@@ -21,16 +21,15 @@ await db.tx(async (t) => {
     const filas = local.prepare(`SELECT * FROM ${tabla}`).all();
     if (!filas.length) continue;
     const cols = Object.keys(filas[0]);
-    await t.run(`SET IDENTITY_INSERT ${tabla} ON`);
     for (const fila of filas) {
       if (tabla === 'evidencia' && fila.url_archivo.startsWith('local://') && process.env.S3_BUCKET_EVIDENCIAS) {
         const key = fila.url_archivo.slice(8);
         const tipo = key.endsWith('.pdf') ? 'application/pdf' : `image/${key.split('.').pop().replace('jpg', 'jpeg')}`;
         fila.url_archivo = await saveFile(key, await readFile(join('uploads', key)), tipo);
       }
-      await t.run(`INSERT INTO ${tabla} (${cols.join(', ')}) VALUES (${cols.map(() => '?').join(', ')})`, cols.map((c) => fila[c]));
+      // IDENTITY_INSERT solo dura dentro del mismo lote, por eso va junto al INSERT
+      await t.run(`SET IDENTITY_INSERT ${tabla} ON; INSERT INTO ${tabla} (${cols.join(', ')}) VALUES (${cols.map(() => '?').join(', ')}); SET IDENTITY_INSERT ${tabla} OFF`, cols.map((c) => fila[c]));
     }
-    await t.run(`SET IDENTITY_INSERT ${tabla} OFF`);
     console.log(`${tabla}: ${filas.length} filas`);
   }
 });
