@@ -4,24 +4,23 @@ import SideNavigation from './SideNavigation.jsx';
 
 export default function AppLayout({ resources, route, children }) {
   const mainRef = useRef(null);
-  // Por defecto el menú muestra solo íconos y se abre al pasar el mouse; con un clic queda fijo.
-  const [pinned, setPinned] = useState(() => {
-    try { return localStorage.getItem('eco-menu-fijo') === 'si'; } catch { return false; }
+  // El menú muestra solo íconos y se abre al pasar el mouse. Con un clic en el botón se bloquea y queda quieto.
+  const [locked, setLocked] = useState(() => {
+    try { return localStorage.getItem('eco-menu-bloqueado') === 'si'; } catch { return false; }
   });
-  const toggleMenu = () => setPinned((value) => {
-    try { localStorage.setItem('eco-menu-fijo', value ? 'no' : 'si'); } catch { /* sin almacenamiento */ }
+  const toggleMenu = () => setLocked((value) => {
+    try { localStorage.setItem('eco-menu-bloqueado', value ? 'no' : 'si'); } catch { /* sin almacenamiento */ }
     return !value;
   });
-  const collapsed = !pinned;
 
   useEffect(() => {
     mainRef.current?.focus({ preventScroll: true });
   }, [route]);
 
   return (
-    <div className={`app-shell${collapsed ? ' nav-collapsed' : ''}`}>
+    <div className={`app-shell nav-collapsed${locked ? ' nav-locked' : ''}`}>
       <a className="skip-link" href="#main">Saltar al contenido</a>
-      <AppTopbar resources={resources} route={route} collapsed={collapsed} onToggleMenu={toggleMenu} />
+      <AppTopbar resources={resources} route={route} locked={locked} onToggleMenu={toggleMenu} />
       <SideNavigation resources={resources} route={route} />
       <main id="main" ref={mainRef} tabIndex={-1} className="main-content">{children}</main>
     </div>

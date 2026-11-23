@@ -2,7 +2,7 @@ function BrandMark() {
   return <span className="brand-mark" aria-hidden="true" />;
 }
 
-export default function AppTopbar({ resources, route, collapsed, onToggleMenu }) {
+export default function AppTopbar({ resources, route, locked, onToggleMenu }) {
   // El recorrido de un RAEE, en orden: llega en un lote, se traslada, se registra cada equipo, se evalúa, se trata y se respalda.
   const flow = ['lote', 'traslado', 'dispositivo', 'evaluacion', 'tratamiento', 'evidencia'];
   const tabs = [{ name: 'panel', label: 'Panel' }, ...flow.filter((name) => resources?.[name]).map((name) => ({ name, label: resources[name].title }))];
@@ -10,7 +10,7 @@ export default function AppTopbar({ resources, route, collapsed, onToggleMenu })
   return (
     <header className="app-topbar">
       <div className="brand-row">
-        <button type="button" className="menu-toggle" onClick={onToggleMenu} aria-pressed={!collapsed} aria-controls="side-navigation" title={collapsed ? 'Fijar menú abierto' : 'Soltar menú'} aria-label={collapsed ? 'Fijar menú abierto' : 'Soltar menú'}>
+        <button type="button" className="menu-toggle" onClick={onToggleMenu} aria-pressed={locked} aria-controls="side-navigation" title={locked ? 'Abrir el menú al pasar el mouse' : 'Bloquear el menú'} aria-label={locked ? 'Abrir el menú al pasar el mouse' : 'Bloquear el menú'}>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" aria-hidden="true">
             <path className="bar top" d="M4 7h16" /><path className="bar mid" d="M4 12h16" /><path className="bar bot" d="M4 17h16" />
           </svg>
