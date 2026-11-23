@@ -3,24 +3,22 @@ function BrandMark() {
 }
 
 export default function AppTopbar({ resources, route, collapsed, onToggleMenu }) {
-  const tabs = [
-    { name: 'panel', label: 'Panel', routes: ['panel'] },
-    { name: 'lote', label: resources?.lote?.title ?? 'Lotes', routes: ['lote'] },
-    { name: 'dispositivo', label: resources?.dispositivo?.title ?? 'Dispositivos', routes: ['dispositivo', 'evaluacion', 'tratamiento', 'evidencia'] },
-    { name: 'traslado', label: resources?.traslado?.title ?? 'Traslados', routes: ['traslado'] },
-    { name: 'ruta', label: 'Red', routes: ['organizacion', 'sede', 'ruta'] },
-  ];
+  // El recorrido de un RAEE, en orden: llega en un lote, se traslada, se registra cada equipo, se evalúa, se trata y se respalda.
+  const flow = ['lote', 'traslado', 'dispositivo', 'evaluacion', 'tratamiento', 'evidencia'];
+  const tabs = [{ name: 'panel', label: 'Panel' }, ...flow.filter((name) => resources?.[name]).map((name) => ({ name, label: resources[name].title }))];
 
   return (
     <header className="app-topbar">
       <div className="brand-row">
-        <button type="button" className="menu-toggle" onClick={onToggleMenu} aria-expanded={!collapsed} aria-controls="side-navigation" title={collapsed ? 'Mostrar menú' : 'Ocultar menú'} aria-label={collapsed ? 'Mostrar menú' : 'Ocultar menú'}>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16" /></svg>
+        <button type="button" className="menu-toggle" onClick={onToggleMenu} aria-pressed={!collapsed} aria-controls="side-navigation" title={collapsed ? 'Fijar menú abierto' : 'Soltar menú'} aria-label={collapsed ? 'Fijar menú abierto' : 'Soltar menú'}>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" aria-hidden="true">
+            <path className="bar top" d="M4 7h16" /><path className="bar mid" d="M4 12h16" /><path className="bar bot" d="M4 17h16" />
+          </svg>
         </button>
         <a className="brand" href="#/panel"><BrandMark />EcoRAEE <span>Cloud</span></a>
       </div>
       <nav className="section-tabs" aria-label="Secciones">
-        {tabs.map((tab) => <a className="section-tab" href={`#/${tab.name}`} aria-current={tab.routes.includes(route) ? 'page' : undefined} key={tab.name}>{tab.label}</a>)}
+        {tabs.map((tab) => <a className="section-tab" href={`#/${tab.name}`} aria-current={tab.name === route ? 'page' : undefined} key={tab.name}>{tab.label}</a>)}
       </nav>
     </header>
   );

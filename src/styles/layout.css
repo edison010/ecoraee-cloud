@@ -5,7 +5,7 @@
 .brand-mark { position: relative; display: inline-block; width: 14px; height: 14px; flex: 0 0 auto; border-radius: 4px; background: var(--brand); margin-right: 8px; }
 .brand-mark::after { position: absolute; right: -5px; bottom: -2px; width: 7px; height: 7px; border: 1px solid #fff; border-radius: 2px; background: #8eabff; content: ""; }
 .section-tabs { display: flex; align-items: center; justify-content: center; gap: 5px; min-width: 0; }
-.section-tab { padding: 8px 15px; border-radius: 999px; color: #797881; text-decoration: none; white-space: nowrap; transition: background 150ms var(--ease), color 150ms var(--ease), transform 150ms var(--ease); }
+.section-tab { padding: 8px 13px; border-radius: 999px; color: #797881; text-decoration: none; white-space: nowrap; transition: background 150ms var(--ease), color 150ms var(--ease), transform 150ms var(--ease); }
 .section-tab[aria-current="page"] { background: var(--brand); color: #fff; }
 .side-navigation { position: sticky; top: 66px; grid-row: 2; display: flex; flex-direction: column; gap: 0; height: calc(100vh - 66px); overflow-y: auto; padding: 20px 12px 14px; background: var(--surface); color: var(--ink); }
 .nav-links { display: grid; gap: 2px; }
@@ -34,17 +34,29 @@
   .main-content { grid-row: 3; padding: 20px 16px 48px; }
 }
 
-/* Menú lateral contraíble */
+/* Menú lateral: íconos por defecto, se abre encima al pasar el mouse, fijo con el botón */
 .brand-row { display: flex; align-items: center; gap: 10px; min-width: 0; }
-.menu-toggle { display: grid; place-items: center; width: 36px; height: 36px; flex: 0 0 auto; padding: 0; border: 0; border-radius: 10px; background: transparent; color: #4b4a52; cursor: pointer; }
-.menu-toggle svg { width: 20px; height: 20px; }
-.app-shell { transition: grid-template-columns 200ms var(--ease); }
+.menu-toggle { display: grid; place-items: center; width: 38px; height: 38px; flex: 0 0 auto; padding: 0; border: 0; border-radius: 11px; background: transparent; color: #4b4a52; cursor: pointer; transition: background 160ms var(--ease), color 160ms var(--ease); }
+.menu-toggle svg { width: 20px; height: 20px; overflow: visible; }
+.menu-toggle .bar { transform-origin: 12px 12px; transition: transform 260ms var(--ease), opacity 160ms var(--ease); }
+.menu-toggle[aria-pressed="true"] { background: var(--ink); color: #fff; }
+.menu-toggle[aria-pressed="true"] .top { transform: translate(-3px, 0) scaleX(.62); }
+.menu-toggle[aria-pressed="true"] .bot { transform: translate(-3px, 0) scaleX(.62); }
+.app-shell { transition: grid-template-columns 260ms var(--ease); }
 .app-shell.nav-collapsed { grid-template-columns: 76px minmax(0, 1fr); }
-.nav-collapsed .side-navigation { padding: 16px 12px; }
-.nav-collapsed .nav-group h2 { height: 1px; margin: 12px 8px; padding: 0; overflow: hidden; background: var(--line); color: transparent; }
-.nav-collapsed .nav-link { justify-content: center; padding: 10px 0; }
-.nav-collapsed .nav-link span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.side-navigation { z-index: 9; width: 280px; transition: width 260ms var(--ease), box-shadow 260ms var(--ease); }
+.nav-link { padding-left: 14px; }
+.nav-link span, .nav-group h2 { transition: opacity 180ms var(--ease) 60ms; white-space: nowrap; }
+.nav-collapsed .side-navigation { width: 76px; overflow-x: hidden; }
+.nav-collapsed .side-navigation:not(:hover):not(:focus-within) .nav-link span,
+.nav-collapsed .side-navigation:not(:hover):not(:focus-within) .nav-group h2 { opacity: 0; transition-delay: 0ms; }
+.nav-collapsed .side-navigation:hover, .nav-collapsed .side-navigation:focus-within { width: 280px; box-shadow: 18px 0 40px #13121614; }
 .nav-collapsed .nav-icon { width: 18px; height: 18px; }
-@media (hover: hover) and (pointer: fine) { .menu-toggle:hover { background: #f2f1f4; color: var(--ink); } }
-@media (max-width: 860px) { .menu-toggle { display: none; } .app-shell.nav-collapsed { grid-template-columns: minmax(0, 1fr); } .nav-collapsed .nav-link span { position: static; width: auto; height: auto; clip: auto; } .nav-collapsed .nav-link { padding: 8px 10px; } }
-@media (prefers-reduced-motion: reduce) { .app-shell { transition: none; } }
+.nav-link { transition: background 150ms var(--ease), color 150ms var(--ease), width 260ms var(--ease); }
+.nav-collapsed .side-navigation:not(:hover):not(:focus-within) .nav-link { width: 46px; }
+.nav-collapsed .side-navigation .nav-link { width: 256px; }
+@media (max-width: 860px) { .nav-collapsed .side-navigation .nav-link, .nav-collapsed .side-navigation:not(:hover):not(:focus-within) .nav-link { width: auto; } }
+@media (hover: hover) and (pointer: fine) { .menu-toggle:not([aria-pressed="true"]):hover { background: #f2f1f4; color: var(--ink); } }
+@media (max-width: 860px) { .menu-toggle { display: none; } .app-shell.nav-collapsed { grid-template-columns: minmax(0, 1fr); } .side-navigation, .nav-collapsed .side-navigation { width: auto; box-shadow: none; } .nav-collapsed .side-navigation .nav-link span { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .app-shell, .side-navigation, .nav-link span, .nav-group h2, .menu-toggle .bar { transition: none; } }
+@media (max-width: 1180px) { .section-tabs { justify-content: flex-start; overflow-x: auto; scrollbar-width: none; } .section-tab { padding: 7px 11px; } }

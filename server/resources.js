@@ -39,21 +39,6 @@ export const resources = {
       d('fecha_registro', 'Fecha de registro', { required: true, hasDefault: true }),
     ],
   },
-  dispositivo: {
-    pk: 'id_dispositivo', title: 'Dispositivos', singular: 'dispositivo', group: 'Operación', trace: true,
-    label: 'codigo_trazabilidad', cols: ['codigo_trazabilidad', 'marca', 'modelo', 'id_categoria', 'id_lote', 'peso_kg', 'estado_actual'],
-    order: 'id_dispositivo DESC',
-    fields: [
-      t('codigo_trazabilidad', 'Código de trazabilidad', { required: true, max: 30, hint: 'Ejemplo: ECO-000006' }),
-      r('id_lote', 'Lote', 'lote', { required: true }),
-      r('id_categoria', 'Categoría', 'categoria_raee', { required: true }),
-      t('marca', 'Marca', { max: 60 }),
-      t('modelo', 'Modelo', { max: 60 }),
-      t('numero_serie', 'Número de serie', { max: 60 }),
-      n('peso_kg', 'Peso (kg)', { required: true, min: 0.01 }),
-      s('estado_actual', 'Estado', ESTADOS, { readonly: true, hasDefault: true }),
-    ],
-  },
   traslado: {
     pk: 'id_traslado', title: 'Traslados', singular: 'traslado', group: 'Operación',
     label: 'id_traslado', cols: ['id_lote', 'id_ruta', 'peso_kg', 'fecha_salida', 'fecha_llegada', 'estado'],
@@ -73,6 +58,21 @@ export const resources = {
       if (!ruta.activa) return 'La ruta está inactiva.';
       if (x.peso_kg > ruta.capacidad_kg_mes) return `El peso supera la capacidad de la ruta (${ruta.capacidad_kg_mes} kg/mes).`;
     },
+  },
+  dispositivo: {
+    pk: 'id_dispositivo', title: 'Dispositivos', singular: 'dispositivo', group: 'Operación', trace: true,
+    label: 'codigo_trazabilidad', cols: ['codigo_trazabilidad', 'marca', 'modelo', 'id_categoria', 'id_lote', 'peso_kg', 'estado_actual'],
+    order: 'id_dispositivo DESC',
+    fields: [
+      t('codigo_trazabilidad', 'Código de trazabilidad', { required: true, max: 30, hint: 'Ejemplo: ECO-000006' }),
+      r('id_lote', 'Lote', 'lote', { required: true }),
+      r('id_categoria', 'Categoría', 'categoria_raee', { required: true }),
+      t('marca', 'Marca', { max: 60 }),
+      t('modelo', 'Modelo', { max: 60 }),
+      t('numero_serie', 'Número de serie', { max: 60 }),
+      n('peso_kg', 'Peso (kg)', { required: true, min: 0.01 }),
+      s('estado_actual', 'Estado', ESTADOS, { readonly: true, hasDefault: true }),
+    ],
   },
   evaluacion: {
     pk: 'id_evaluacion', title: 'Evaluaciones', singular: 'evaluación', group: 'Operación',

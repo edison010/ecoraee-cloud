@@ -4,13 +4,15 @@ import SideNavigation from './SideNavigation.jsx';
 
 export default function AppLayout({ resources, route, children }) {
   const mainRef = useRef(null);
-  const [collapsed, setCollapsed] = useState(() => {
-    try { return localStorage.getItem('eco-menu') === 'cerrado'; } catch { return false; }
+  // Por defecto el menú muestra solo íconos y se abre al pasar el mouse; con un clic queda fijo.
+  const [pinned, setPinned] = useState(() => {
+    try { return localStorage.getItem('eco-menu-fijo') === 'si'; } catch { return false; }
   });
-  const toggleMenu = () => setCollapsed((value) => {
-    try { localStorage.setItem('eco-menu', value ? 'abierto' : 'cerrado'); } catch { /* sin almacenamiento */ }
+  const toggleMenu = () => setPinned((value) => {
+    try { localStorage.setItem('eco-menu-fijo', value ? 'no' : 'si'); } catch { /* sin almacenamiento */ }
     return !value;
   });
+  const collapsed = !pinned;
 
   useEffect(() => {
     mainRef.current?.focus({ preventScroll: true });
